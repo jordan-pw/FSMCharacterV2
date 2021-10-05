@@ -15,6 +15,8 @@ namespace Entity
         [SerializeField]
         protected EntityManager manager;
         [SerializeField]
+        protected Animator animator;
+        [SerializeField]
         protected HumanoidDefinition definition;
 
         // Fields required for movement physics. When events are from the manager, these are set.
@@ -54,11 +56,22 @@ namespace Entity
             manager.SendDash -= OnDash;
         }
 
+        protected void SetAnimator()
+        {
+            float velocityZ = Vector3.Dot(velocity.normalized, transform.forward);
+            float velocityX = Vector3.Dot(velocity.normalized, transform.right);
+
+            Debug.Log("Velocity Z: " + velocityZ + "Velocity X: " + velocityX);
+
+            animator.SetFloat("VelocityZ", velocityZ, 0.1f, Time.deltaTime);
+            animator.SetFloat("VelocityX", velocityX, 0.1f, Time.deltaTime);
+        }
+
         protected void ChangeState(BodyState newState)
         {
             Debug.Log("Changing from: " + this + " to : " + newState);
             // New state needs to know what happened while it was disabled
-            newState.SendStats(velocity, movement, jumping);
+            newState.SendStats(velocity, movement, jumping, sprinting, crouching);
             // Then, once it recieves info, enable it, and disable the current state
             newState.enabled = true;
             this.enabled = false;
@@ -69,11 +82,13 @@ namespace Entity
         /// </summary>
         protected abstract void Move();
 
-        protected virtual void SendStats(Vector3 vel, Vector2 mov, bool jump)
+        protected void SendStats(Vector3 vel, Vector2 mov, bool jump, bool sprint, bool crouch)
         {
             velocity = vel;
             movement = mov;
             jumping = jump;
+            sprinting = sprint;
+            crouching = crouch;
         }
 
         #region Event Actions

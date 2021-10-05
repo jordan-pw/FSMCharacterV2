@@ -7,6 +7,7 @@ namespace Entity
         // Delegate and event for movement vector2, invoked when the entity wants to move
         public delegate void Move(Vector2 move);
         public event Move SendMove;
+        public event Move SendLook;
 
         // Delegate and event for boolean movement actions
         public delegate void MoveAction(bool mAction);
@@ -51,6 +52,11 @@ namespace Entity
         protected virtual void RaiseSendDash(bool mAction)
         {
             SendDash?.Invoke(mAction);
+        }
+
+        protected virtual void RaiseSendLook(Vector2 look)
+        {
+            SendLook?.Invoke(look);
         }
         #endregion
     }

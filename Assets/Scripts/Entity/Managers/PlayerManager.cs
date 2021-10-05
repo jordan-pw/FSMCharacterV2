@@ -82,6 +82,7 @@ namespace Entity.Player
             if (playerInput.currentControlScheme == "Keyboard") // If keyboard input, special math must be done to normalize
             {
                 // Normalize(vec);
+                RaiseSendLook(vec);
             }
             else // If controller input, the look direction is already normalized
             {

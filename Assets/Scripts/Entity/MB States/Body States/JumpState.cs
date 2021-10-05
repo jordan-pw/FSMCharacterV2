@@ -60,6 +60,7 @@ namespace Entity
             // Displacement is the distance the entity will move per frame
             Vector3 displacement = velocity * Time.deltaTime;
 
+            SetAnimator();
             characterController.Move(displacement);
         }
 
