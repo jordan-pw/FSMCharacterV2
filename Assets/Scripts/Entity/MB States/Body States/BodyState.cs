@@ -65,6 +65,28 @@ namespace Entity
 
             animator.SetFloat("VelocityZ", velocityZ, 0.1f, Time.deltaTime);
             animator.SetFloat("VelocityX", velocityX, 0.1f, Time.deltaTime);
+
+            animator.SetBool("Crouching", crouching);
+            animator.SetBool("Sprinting", sprinting);
+
+            if (!characterController.isGrounded)
+            {
+                if (velocity.y > 0)
+                {
+                    animator.SetBool("Jumping", true);
+                }
+                else
+                {
+                    animator.SetBool("Jumping", false);
+                    animator.SetBool("Falling", true);
+                }
+            }
+            else
+            {
+                animator.SetBool("Jumping", false);
+                animator.SetBool("Falling", false);
+            }
+
         }
 
         protected void ChangeState(BodyState newState)

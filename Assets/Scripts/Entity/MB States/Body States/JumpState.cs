@@ -37,6 +37,7 @@ namespace Entity
             velocity.y = 0;
             // This formula determines the y velocity to impulse to reach the set jump height
             velocity.y += (Mathf.Sqrt(-2f * gravity * jumpHeight)); // -2f * gravity * jump height
+            SetAnimator();
         }
 
         /// <summary>

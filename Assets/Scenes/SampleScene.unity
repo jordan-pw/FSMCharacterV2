@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-169522
+  m_Name: pb_Mesh20980
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -649,7 +649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraInput: {fileID: 1687258587}
   focus: {fileID: 1371444490}
-  distance: 90
+  distance: 45
   focusRadius: 2
   focusCentering: 0.75
   rotationSpeed: 150
@@ -681,7 +681,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 10
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -927,6 +927,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8497536163058548613, guid: dd7c363103585774facbd6859cf3d1fc, type: 3}
+      propertyPath: toggleCrouch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8497536163058548613, guid: dd7c363103585774facbd6859cf3d1fc, type: 3}
+      propertyPath: toggleSprint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8497536163058548615, guid: dd7c363103585774facbd6859cf3d1fc, type: 3}
       propertyPath: m_RootOrder
       value: 2
