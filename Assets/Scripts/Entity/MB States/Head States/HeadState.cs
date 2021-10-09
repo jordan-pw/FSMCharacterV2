@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Entity
 {
-    [RequireComponent(typeof(CharacterController))]
     public abstract class HeadState : MonoBehaviour
     {
         [SerializeField]

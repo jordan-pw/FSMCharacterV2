@@ -6,6 +6,8 @@ namespace Entity
     {
         private Transform inputSpace;
 
+
+
         private void Start()
         {
             inputSpace = Camera.main.transform;
@@ -42,6 +44,14 @@ namespace Entity
             int speed = sprinting ? sprintSpeed : baseSpeed;
             speed = crouching ? crouchSpeed : speed;
 
+            if (OnSlope())
+            {
+                float tempSpeed = speed;
+                tempSpeed *= GetSlopeNormal().y;
+                speed = (int)tempSpeed;
+                Debug.Log("Speed is now: " + speed);
+            }
+
             // Max Speed Change = the max change in speed per frame. Varies depending on if in the air or not
             float maxSpeedChange = characterController.isGrounded ?
                 maxAcceleration * Time.deltaTime : maxAirAcceleration * Time.deltaTime;
@@ -63,8 +73,12 @@ namespace Entity
                 Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
             velocity.z =
                 Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange);
-            // Gravity: If grounded = -1f (for character controller weirdness), and if in the air, gravity is just gravity.
-            velocity.y = characterController.isGrounded ? -1f : velocity.y += gravity * Time.deltaTime;
+
+            // If on a slope, gravity needs to be set to a higher value to prevent the entity from bouncing around
+            float groundGravity = OnSlope() ? -characterController.stepOffset / Time.deltaTime : -1f;
+
+            // Gravity: If grounded = -1f (for character controller weirdness) or slope gravity, and if in the air, gravity is just gravity.
+            velocity.y = characterController.isGrounded ? groundGravity : velocity.y += gravity * Time.deltaTime;
 
             // Displacement is the distance the entity will move per frame
             Vector3 displacement = velocity * Time.deltaTime;

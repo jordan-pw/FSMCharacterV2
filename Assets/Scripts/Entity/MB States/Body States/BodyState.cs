@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Entity
 {
-    [RequireComponent(typeof(CharacterController))]
     public abstract class BodyState : MonoBehaviour
     {
         /*
@@ -32,6 +31,8 @@ namespace Entity
         protected int baseSpeed, sprintSpeed, crouchSpeed;
         protected int jumpHeight;
 
+        private RaycastHit hit;
+
         protected virtual void OnEnable()
         {
             // Subscribe to all movement events
@@ -58,10 +59,18 @@ namespace Entity
 
         protected void SetAnimator()
         {
-            float velocityZ = Vector3.Dot(velocity.normalized, transform.forward);
-            float velocityX = Vector3.Dot(velocity.normalized, transform.right);
+            // Ignoring y component
+            Vector3 flatForward = transform.forward;
+            Vector3 flatRight = transform.right;
+            flatForward.y = 0f;
+            flatRight.y = 0f;
+            Vector3 flatVelocity = velocity;
+            flatVelocity.y = 0f;
 
-            Debug.Log("Velocity Z: " + velocityZ + "Velocity X: " + velocityX);
+            float velocityZ = Vector3.Dot(flatVelocity.normalized, flatForward);
+            float velocityX = Vector3.Dot(flatVelocity.normalized, flatRight);
+
+            //Debug.Log("Velocity Z: " + velocityZ + "Velocity X: " + velocityX);
 
             animator.SetFloat("VelocityZ", velocityZ, 0.1f, Time.deltaTime);
             animator.SetFloat("VelocityX", velocityX, 0.1f, Time.deltaTime);
@@ -71,11 +80,11 @@ namespace Entity
 
             if (!characterController.isGrounded)
             {
-                if (velocity.y > 0)
+                if (velocity.y > 0f)
                 {
                     animator.SetBool("Jumping", true);
                 }
-                else
+                else if(velocity.y <= -2f)
                 {
                     animator.SetBool("Jumping", false);
                     animator.SetBool("Falling", true);
@@ -91,7 +100,6 @@ namespace Entity
 
         protected void ChangeState(BodyState newState)
         {
-            Debug.Log("Changing from: " + this + " to : " + newState);
             // New state needs to know what happened while it was disabled
             newState.SendStats(velocity, movement, jumping, sprinting, crouching);
             // Then, once it recieves info, enable it, and disable the current state
@@ -141,6 +149,45 @@ namespace Entity
         protected virtual void OnDash(bool dash)
         {
             dashing = dash;
+        }
+        #endregion
+
+        #region Slope Functions
+
+        protected bool OnSlope()
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height / 2 * 1.5f))
+                if (hit.normal != Vector3.up)
+                    return true;
+            return false;
+        }
+
+        protected bool OnSteepSlope()
+        {
+            if (!characterController.isGrounded) return false;
+
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height / 2 + 1.5f))
+            {
+                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+                if (slopeAngle > characterController.slopeLimit) return true;
+            }
+            return false;
+        }
+
+        protected Vector3 GetSlopeNormal()
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height / 2 * 1.5f))
+                if (hit.normal != Vector3.up)
+                    return hit.normal;
+            return Vector3.one;
+        }
+
+        protected Vector3 GetSlopePoint()
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height / 2 * 1.5f))
+                if (hit.normal != Vector3.up)
+                    return hit.point;
+            return Vector3.one;
         }
         #endregion
 

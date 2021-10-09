@@ -4,6 +4,15 @@ namespace Entity
 {
     public class IdleState : BodyState
     {
+        private Vector3 slopeMovement;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            // Reset slopeMovement on enable
+            slopeMovement = Vector3.zero;
+        }
+
         private void Update()
         {
             Move();
@@ -31,8 +40,27 @@ namespace Entity
             // Displacement is the distance the entity will move per frame
             Vector3 displacement = velocity * Time.deltaTime;
 
+            // If on a slope, we must slide
+            if (OnSteepSlope())
+            {
+                displacement = SlopeMovement() * Time.deltaTime;
+            }
+
             SetAnimator();
             characterController.Move(displacement);
+        }
+
+        /// <summary>
+        /// Idle Slope movement, when idle and on a steep slope, slide down
+        /// </summary>
+        private Vector3 SlopeMovement()
+        {
+            Vector3 slopeDirection = Vector3.up - GetSlopeNormal() * Vector3.Dot(Vector3.up, GetSlopeNormal());
+            float slideSpeed = baseSpeed + Time.deltaTime;
+
+            Vector3 slideMovement = slopeDirection * -slideSpeed;
+            slideMovement.y = slideMovement.y - GetSlopePoint().y;
+            return slideMovement;
         }
     }
 }
