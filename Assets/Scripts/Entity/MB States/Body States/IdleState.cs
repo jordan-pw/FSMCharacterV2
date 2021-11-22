@@ -4,14 +4,6 @@ namespace Entity
 {
     public class IdleState : BodyState
     {
-        private Vector3 slopeMovement;
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            // Reset slopeMovement on enable
-            slopeMovement = Vector3.zero;
-        }
 
         private void Update()
         {
@@ -27,6 +19,11 @@ namespace Entity
             if (jumping && characterController.isGrounded)
             {
                 ChangeState(GetComponent<JumpState>());
+            }
+
+            if (dashing && characterController.isGrounded)
+            {
+                ChangeState(GetComponent<DashState>());
             }
         }
 

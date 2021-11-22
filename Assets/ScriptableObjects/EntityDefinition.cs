@@ -6,6 +6,8 @@ public class EntityDefinition : ScriptableObject
 {
     public string entityName;
 
+    public Stat baseHealth;
+
     public Stat speed;
 
     public Stat maxAcceleration;

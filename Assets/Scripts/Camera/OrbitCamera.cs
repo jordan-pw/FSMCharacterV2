@@ -118,7 +118,7 @@ namespace PlayerCamera
                         if (angleDistance <= angleThreshold)
                         {
                             input = cameraInput.TakeInput();
-                            goalAngle = goalAngle + rotationAngle * -input;
+                            goalAngle = goalAngle + rotationAngle * input;
                         }
 
                         // Smoothly move towards the goal angle

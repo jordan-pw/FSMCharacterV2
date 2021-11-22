@@ -71,7 +71,10 @@ namespace Entity.Player
 
         public void OnDodge(InputAction.CallbackContext context)
         {
+            if (context.performed) dash = true;
+            if (context.canceled) dash = false;
 
+            RaiseSendDash(dash);
         }
 
         public void OnLook(InputAction.CallbackContext context)

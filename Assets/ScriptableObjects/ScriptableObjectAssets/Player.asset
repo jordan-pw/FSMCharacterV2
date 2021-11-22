@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   entityName: Player
+  baseHealth:
+    baseValue: 0
   speed:
     baseValue: 10
   maxAcceleration:
@@ -21,11 +23,25 @@ MonoBehaviour:
     baseValue: 0
   baseDamage:
     baseValue: 0
+  baseStamina:
+    baseValue: 100
+  staminaRechargeRate:
+    baseValue: 10
+  staminaRechargeDelay:
+    baseValue: 5
   crouchSpeed:
     baseValue: 6
   sprintSpeed:
-    baseValue: 15
+    baseValue: 12
   maxAirAcceleration:
     baseValue: 30
   jumpHeight:
     baseValue: 2
+  dashSpeed:
+    baseValue: 17
+  dashTime:
+    baseValue: 0.5
+  dashAcceleration:
+    baseValue: 20
+  dashCost:
+    baseValue: 10

@@ -28,6 +28,11 @@ namespace Entity
             {
                 ChangeState(GetComponent<JumpState>());
             }
+
+            if (dashing)
+            {
+                ChangeState(GetComponent<DashState>());
+            }
         }
 
         /// <summary>

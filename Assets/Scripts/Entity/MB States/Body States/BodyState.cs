@@ -77,6 +77,9 @@ namespace Entity
 
             animator.SetBool("Crouching", crouching);
             animator.SetBool("Sprinting", sprinting);
+            animator.SetBool("Dodge", dashing);
+
+            animator.SetFloat("DodgeTime", definition.dashTime);
 
             if (!characterController.isGrounded)
             {
@@ -101,10 +104,10 @@ namespace Entity
         protected void ChangeState(BodyState newState)
         {
             // New state needs to know what happened while it was disabled
-            newState.SendStats(velocity, movement, jumping, sprinting, crouching);
+            newState.SendStats(velocity, movement, jumping, sprinting, crouching, dashing);
             // Then, once it recieves info, enable it, and disable the current state
-            newState.enabled = true;
             this.enabled = false;
+            newState.enabled = true;
         }
 
         /// <summary>
@@ -112,13 +115,14 @@ namespace Entity
         /// </summary>
         protected abstract void Move();
 
-        protected void SendStats(Vector3 vel, Vector2 mov, bool jump, bool sprint, bool crouch)
+        protected void SendStats(Vector3 vel, Vector2 mov, bool jump, bool sprint, bool crouch, bool dash)
         {
             velocity = vel;
             movement = mov;
             jumping = jump;
             sprinting = sprint;
             crouching = crouch;
+            dashing = dash;
         }
 
         #region Event Actions
